@@ -35,37 +35,49 @@ bot.on("ready", async () => {
     bot.user.setActivity(`over my ${bot.guilds.size} servers`, {type: "WATCHING"});
 });
 
-//CHAT LOGS (EDIT)
-bot.on("messageUpdate", async(oldMessage, newMessage) => {
-    //check if content has been updated
-    if(oldMessage.content === newMessage.content) return;
+//GLOBAL LOGS (edit) starts here
+bot.on("messageUpdate", async(oldMessage, newMessage) =>{
+    if(oldMessage.content === newMessage.content){
+        return;
+    }
+        var globalLogChannel = bot.channels.get("592741746740559898");
 
-//get the log channel
-var logChannelArray = ["552321234952519683"];
-var correspondingGuildID =[];
-////var logchannel = bot.channels.get("552321234952519683");
-//var logchannel2 = message.guild.channels.find(`name`, "chatlogs2");
+        let globalLogEmbed = new Discord.RichEmbed()
+        .setAuthor(oldMessage.author.tag, oldMessage.author.avatarURL)
+        .setThumbnail(oldMessage.author.avatarURL)
+        .setColor("RED")
+        .setDescription("A message from a user was edited")
+        .addField("Before", oldMessage.content, true)
+        .addField("After", newMessage.content, true)
+        .setTimestamp()
+        .setFooter("This is a global embed for edited messages")
 
-let logembed = new Discord.RichEmbed()
-.setAuthor(oldMessage.author.tag, oldMessage.author.avatarURL)
-.setThumbnail(oldMessage.author.avatarURL)
-.setColor("RED")
-.setDescription("Message edited")
-.addField("before", oldMessage.content, true)
-.addField("after", newMessage.content, true)
-.setTimestamp()
-
-//look for/compare the guild IDs of the updated message AND the IDs of the channels in the array
-////if(newMessage.guild.id) in ARRAY
-if(correspondingGuildID.find(newMessage.guild.id)){
-    var logchannel = bot.channels.get(ID OF LOGCHANNEL OF THE ABOVE LINES GUILD)
-}
-
-//send the embed
-logchannel.send(logembed)
-//logchannel2.send(logembed)
-
+        globalLogChannel.send(globalLogEmbed)
 })
+//GLOBAL LOGS (edit) ends here
+
+//logs (edit) starts here
+bot.on("messageUpdate", async(oldMessage, newMessage) =>{
+    if(oldMessage.content === newMessage.content){
+        return;
+    }
+
+        let logEmbed = new Discord.RichEmbed()
+        .setAuthor(oldMessage.author.tag, oldMessage.author.avatarURL)
+        .setThumbnail(oldMessage.author.avatarURL)
+        .setColor("RANDOM")
+        .setDescription("A message from a user was edited")
+        .addField("Before", oldMessage.content, true)
+        .addField("After", newMessage.content, true)
+        .setTimestamp()
+        .setFooter("This is an embed for edited messages")
+
+        let loggingChannel = newMessage.guild.channels.find(ch => ch.name === "spicylogs")
+        if(!loggingChannel) return;
+
+        loggingChannel.send(logEmbed);
+})
+//logs (edit) ends here
 
 bot.on("guildMemberAdd", async member => {
     console.log(`${member.id} has joined the server.`);
